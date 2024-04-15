@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">CallScreenApp</string>
+    <string name="call_themes_fragment_title_text">Call Screen Themes</string>
+    <string name="customize_fragment_title_text">Customize</string>
+    <string name="customize_fragment_preview">Preview</string>
+    <string name="my_themes_fragment_title_text">My Themes</string>
+
+</resources>
