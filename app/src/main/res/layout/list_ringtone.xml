@@ -9,6 +9,7 @@
     app:layout_constraintTop_toTopOf="parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/list_ringtone_card"
         android:layout_width="match_parent"
         android:layout_height="71dp"
         android:paddingHorizontal="12dp"

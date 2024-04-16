@@ -48,12 +48,14 @@ class ShowImageActivity : AppCompatActivity() {
 
         val btnBack: ImageView = findViewById(R.id.show_image_activity_btn_back)
         btnBack.setOnClickListener() {
-            finish()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         val btnSubmit: ImageView = findViewById(R.id.show_image_activity_btn_submit)
         btnSubmit.setOnClickListener() {
             val intent = Intent(this, NotificationActivity::class.java)
+            intent.putExtra("URL_ITEM", urlItem)
             startActivity(intent)
         }
 
@@ -89,6 +91,7 @@ class ShowImageActivity : AppCompatActivity() {
                 loadImageIntoView(this, iconCallShowRed, idIconCallShowRed)
             }
         }
+
     }
 
     fun loadImageIntoView(context: Context, imageView: ImageView, imageUrl: Int) {

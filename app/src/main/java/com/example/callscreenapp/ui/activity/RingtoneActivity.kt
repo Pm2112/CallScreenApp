@@ -1,5 +1,6 @@
 package com.example.callscreenapp.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
@@ -52,7 +53,14 @@ class RingtoneActivity : AppCompatActivity() {
 
         val btnBack: ImageView = findViewById(R.id.ringtone_activity_icon_back)
         btnBack.setOnClickListener(){
-            finish()
+            val intent = Intent(this, ShowImageActivity::class.java)
+            startActivity(intent)
+        }
+
+        val btnSubmit: ImageView = findViewById(R.id.ringtone_activity_icon_submit)
+        btnSubmit.setOnClickListener(){
+            val intent = Intent(this, ShowImageActivity::class.java)
+            startActivity(intent)
         }
     }
 }

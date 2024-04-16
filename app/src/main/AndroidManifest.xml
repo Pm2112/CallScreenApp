@@ -10,6 +10,21 @@
     <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- Permission for accessing contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.MODIFY_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+    <uses-permission
+        android:name="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <queries>
+        <intent>
+            <action android:name="android.app.role.ROLE_DIALER" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -21,6 +36,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CallScreenApp"
         tools:targetApi="31">
+
+        <activity
+            android:name=".ui.activity.PhoneCall"
+            android:launchMode="singleInstance"
+            android:exported="true">
+            <!-- region provides ongoing call UI -->
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+            <!-- endregion -->
+            <!-- region provides dial UI -->
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.activity.NotificationActivity"
             android:exported="false" />
@@ -42,6 +80,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".service.ConnectionService"
+            android:exported="true"
+            android:permission="android.permission.BIND_INCALL_SERVICE" >
+            <meta-data
+                android:name="android.telecom.IN_CALL_SERVICE_UI"
+                android:value="true" />
+            <meta-data
+                android:name="android.telecom.IN_CALL_SERVICE_RINGING"
+                android:value="true" />
+
+            <intent-filter>
+                <action android:name="android.telecom.InCallService" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".service.ListenerService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
+            <intent-filter>
+                <action android:name=".service.CallShowService" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

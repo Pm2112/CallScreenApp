@@ -77,8 +77,9 @@ class CallThemesFragment : Fragment() {
         val btnShowPermissions: ImageView =
             view.findViewById(R.id.call_themes_fragment_icon_setting)
         btnShowPermissions.setOnClickListener {
-            val intent = Intent(context, SettingActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(context, SettingActivity::class.java)
+//            startActivity(intent)
+            showPermissionSheet()
         }
 
         val listImage = listOf(
@@ -101,7 +102,7 @@ class CallThemesFragment : Fragment() {
         listImageView.adapter = PhoneCallListImageAdapter(listImage)
     }
 
-    fun showPermissionSheet() {
+    private fun showPermissionSheet() {
         val permissionSheet = PremissionSheetFragment()
         permissionSheet.show(childFragmentManager, permissionSheet.tag)
     }

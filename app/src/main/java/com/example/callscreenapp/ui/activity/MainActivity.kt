@@ -1,6 +1,10 @@
 package com.example.callscreenapp.ui.activity
 
+import android.content.ComponentName
 import android.os.Bundle
+import android.telecom.PhoneAccount
+import android.telecom.PhoneAccountHandle
+import android.telecom.TelecomManager
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +13,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.callscreenapp.R
-import com.example.callscreenapp.image.downloadAndSaveImage
 import com.example.callscreenapp.ui.fragment.call_themes.CallThemesFragment
 import com.example.callscreenapp.ui.fragment.customize.CustomizeFragment
 import com.example.callscreenapp.ui.fragment.my_themes.MyThemesFragment
+import android.content.Context
 
 class MainActivity : AppCompatActivity() {
+
     // Lưu trữ các fragments để tái sử dụng
     private val callThemesFragment by lazy { CallThemesFragment() }
     private val customizeFragment by lazy { CustomizeFragment() }
@@ -80,6 +85,5 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
-
 
 }
