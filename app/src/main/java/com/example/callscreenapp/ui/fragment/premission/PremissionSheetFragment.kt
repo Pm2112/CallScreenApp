@@ -93,9 +93,6 @@ class PremissionSheetFragment : BottomSheetDialogFragment() {
                 Toast.makeText(context, "Android 6.0 and above required to change default phone app", Toast.LENGTH_LONG).show()
             }
         }
-
-
-
     }
 
     private fun checkAndRequestPermission(permission: String, requestCode: Int) {
@@ -111,8 +108,6 @@ class PremissionSheetFragment : BottomSheetDialogFragment() {
             }
         }
     }
-
-
 
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(

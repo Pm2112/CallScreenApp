@@ -5,33 +5,61 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.callscreenapp.R
+import com.example.callscreenapp.model.ListAvatar
 import com.example.callscreenapp.model.ListCallButton
 import com.example.callscreenapp.model.ListRingtone
+import com.example.callscreenapp.model.ListTopic
 import com.example.callscreenapp.redux.action.AppAction
 import com.example.callscreenapp.redux.store.store
 
-class ListRingtoneAdapter (private val nameRingtone: List<ListRingtone>) :
-    RecyclerView.Adapter<ListRingtoneAdapter.ListRingtoneViewHolder>() {
+class ListRingtoneAdapter (private val itemTopic: List<ListAvatar>) : RecyclerView.Adapter<ListAvatarAdapter.ListAvatarViewHolder>() {
 
     private var selectedPosition = 0  // Lưu vị trí được chọn
 
-    class ListRingtoneViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val titleRingtone: TextView = view.findViewById(R.id.list_ringtone_title)
+    class ListAvatarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imageAvatar: TextView = view.findViewById(R.id.list_topic_card_text)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListRingtoneViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListTopicViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_ringtone, parent, false)
-        return ListRingtoneViewHolder(view)
+            .inflate(R.layout.list_topic_image, parent, false)
+        return ListTopicViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ListRingtoneViewHolder, position: Int) {
-        val nameRingtone = nameRingtone[position]
-        holder.titleRingtone.text = nameRingtone.nameRingtone
+    override fun onBindViewHolder(holder: ListTopicViewHolder, position: Int) {
+        val itemTopic = itemTopic[position]
+        holder.textViewName.text = itemTopic.nameTopic
+        Glide.with(holder.itemView.context).load(itemTopic.urlTopic).into(holder.iconViewImage)
+
+        // Set background based on selection
+        val cardColor = if (position == selectedPosition) R.color.topic_active else R.color.white
+        holder.layout.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, cardColor))
+        val textColor = if (position == selectedPosition) R.color.white else R.color.topic_text
+        holder.textViewName.setTextColor(ContextCompat.getColorStateList(holder.itemView.context, textColor))
+        val iconTopic = if (position == selectedPosition) R.drawable.icon_topic_active else R.drawable.icon_topic
+        holder.iconViewImage.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, iconTopic))
+
+        // Handle item clicks
+        holder.itemView.setOnClickListener {
+            val previousItem = selectedPosition
+            selectedPosition = holder.adapterPosition
+            notifyItemChanged(previousItem)  // Refresh the previously selected item
+            notifyItemChanged(selectedPosition)  // Refresh the currently selected item
+
+            // Cuộn RecyclerView để mục được chọn hiển thị ở giữa
+            (holder.itemView.parent as? RecyclerView)?.layoutManager?.let {
+                if (it is LinearLayoutManager) {
+                    it.scrollToPositionWithOffset(position, 150)  // Giá trị 150 là offset để căn chỉnh mục đích
+                }
+            }
+        }
     }
 
-    override fun getItemCount(): Int = nameRingtone.size
+    override fun getItemCount(): Int = itemTopic.size
 }
