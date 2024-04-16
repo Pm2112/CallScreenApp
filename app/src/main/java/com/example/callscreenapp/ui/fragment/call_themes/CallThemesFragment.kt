@@ -56,8 +56,8 @@ class CallThemesFragment : Fragment() {
         val listImageView: RecyclerView = view.findViewById(R.id.call_themes_fragment_list_image)
         listTopic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val snapHelper = PagerSnapHelper()
-        snapHelper.attachToRecyclerView(listTopic)
+//        val snapHelper = PagerSnapHelper()
+//        snapHelper.attachToRecyclerView(listTopic)
 
         // Tạo danh sách mẫu
         val nameTopic = listOf(
@@ -82,12 +82,19 @@ class CallThemesFragment : Fragment() {
         }
 
         val listImage = listOf(
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
+            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
             PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA")
         )
 
         val layoutManager = FlexboxLayoutManager(context).apply {
             flexDirection = FlexDirection.ROW
-            justifyContent = JustifyContent.FLEX_START
+            justifyContent = JustifyContent.SPACE_BETWEEN
         }
         listImageView.layoutManager = layoutManager
 

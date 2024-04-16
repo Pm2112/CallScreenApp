@@ -68,6 +68,7 @@
                 android:layout_marginTop="14dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
+                android:paddingBottom="84dp"
                 app:layout_constraintTop_toBottomOf="@+id/call_themes_fragment_list_topic"
                 app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

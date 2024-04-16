@@ -1,5 +1,6 @@
 package com.example.callscreenapp.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.callscreenapp.R
 import com.example.callscreenapp.model.PhoneCallListImage
+import com.example.callscreenapp.ui.activity.ShowImageActivity
 
 class PhoneCallListImageAdapter(private val images: List<PhoneCallListImage>) :
     RecyclerView.Adapter<PhoneCallListImageAdapter.ListImageViewHolder>() {
@@ -29,10 +31,10 @@ class PhoneCallListImageAdapter(private val images: List<PhoneCallListImage>) :
 
         // Đặt sự kiện click cho view của ViewHolder
         holder.itemView.setOnClickListener {
-//            val intent = Intent(holder.itemView.context, ScreenActivity::class.java)
-//            // Truyền dữ liệu nếu cần, ví dụ dưới đây truyền urlItem
-//            intent.putExtra("URL_ITEM", imageItem.urlItem)
-//            holder.itemView.context.startActivity(intent)
+            val intent = Intent(holder.itemView.context, ShowImageActivity::class.java)
+            // Truyền dữ liệu nếu cần, ví dụ dưới đây truyền urlItem
+            intent.putExtra("URL_ITEM", imageItem.urlName)
+            holder.itemView.context.startActivity(intent)
         }
     }
 

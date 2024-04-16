@@ -4,5 +4,6 @@
     <string name="customize_fragment_title_text">Customize</string>
     <string name="customize_fragment_preview">Preview</string>
     <string name="my_themes_fragment_title_text">My Themes</string>
+    <string name="ringtone_activity_title_text">Ringtones</string>
 
 </resources>

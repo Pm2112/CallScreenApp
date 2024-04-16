@@ -11,5 +11,6 @@
     <color name="home_card">#EBF0F7</color>
     <color name="topic_text">#1954C8</color>
     <color name="preview_text">#1954C8</color>
+    <color name="menu_option_card">#1954c826</color>
     <color name="none">#00000066</color>
 </resources>

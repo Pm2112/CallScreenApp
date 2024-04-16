@@ -6,13 +6,9 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Permission for making phone calls -->
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-
-    <!-- Permission for accessing contacts -->
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- Permission for making phone calls -->
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- Permission for accessing contacts -->
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
 
     <application
@@ -25,6 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CallScreenApp"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activity.NotificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.RingtoneActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ShowImageActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.SettingActivity"
             android:exported="false" />
