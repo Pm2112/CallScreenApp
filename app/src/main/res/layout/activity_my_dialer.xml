@@ -5,30 +5,28 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.PhoneCall">
+    android:background="@drawable/background_main"
+    tools:context=".ui.activity.MyDialerActivity">
+
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/background_main"
-        android:importantForAccessibility="no" />
-
-    <ImageView
-        android:layout_width="71dp"
-        android:layout_height="71dp"
+        android:id="@+id/btn_answer"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:src="@drawable/icon_call_green"
-        android:layout_marginStart="48dp"
         android:layout_marginBottom="92dp"
+        android:layout_marginStart="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <ImageView
-        android:layout_width="71dp"
-        android:layout_height="71dp"
+        android:id="@+id/btn_reject"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:src="@drawable/icon_call_red"
-        android:layout_marginEnd="48dp"
         android:layout_marginBottom="92dp"
+        android:layout_marginEnd="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />

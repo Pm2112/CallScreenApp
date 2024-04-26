@@ -9,6 +9,11 @@
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Permission for making phone calls -->
     <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- Permission for accessing contacts -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
@@ -36,29 +41,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CallScreenApp"
         tools:targetApi="31">
-
         <activity
-            android:name=".ui.activity.PhoneCall"
-            android:launchMode="singleInstance"
-            android:exported="true">
-            <!-- region provides ongoing call UI -->
-            <intent-filter>
-                <action android:name="android.intent.action.DIAL" />
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="tel" />
-            </intent-filter>
-            <!-- endregion -->
-            <!-- region provides dial UI -->
-            <intent-filter>
-                <action android:name="android.intent.action.DIAL" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+            android:name=".ui.activity.MyDialerActivity"
+            android:exported="false">
         </activity>
-
         <activity
             android:name=".ui.activity.NotificationActivity"
             android:exported="false" />
@@ -79,12 +65,23 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="tel" />
+            </intent-filter>
+        </activity>
         <service
-            android:name=".service.ConnectionService"
+            android:name=".service.MyInCallServiceImplementation"
             android:exported="true"
-            android:permission="android.permission.BIND_INCALL_SERVICE" >
+            android:permission="android.permission.BIND_INCALL_SERVICE">
             <meta-data
                 android:name="android.telecom.IN_CALL_SERVICE_UI"
                 android:value="true" />
@@ -96,17 +93,6 @@
                 <action android:name="android.telecom.InCallService" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".service.ListenerService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
-            <intent-filter>
-                <action android:name=".service.CallShowService" />
-            </intent-filter>
-        </service>
-
     </application>
 
 </manifest>

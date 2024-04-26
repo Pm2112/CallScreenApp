@@ -1,6 +1,7 @@
 package com.example.callscreenapp.ui.fragment.call_themes
 
-import android.content.Intent
+
+
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,25 +9,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.callscreenapp.R
 import com.example.callscreenapp.adapter.ListTopicAdapter
 import com.example.callscreenapp.adapter.PhoneCallListImageAdapter
+import com.example.callscreenapp.data.ListCategoryAll
+import com.example.callscreenapp.data.ListCategoryAnimal
+import com.example.callscreenapp.data.ListCategoryAnime
+import com.example.callscreenapp.data.ListCategoryCastle
+import com.example.callscreenapp.data.ListCategoryFantasy
+import com.example.callscreenapp.data.ListCategoryGame
+import com.example.callscreenapp.data.ListCategoryLove
+import com.example.callscreenapp.data.ListCategoryNature
+import com.example.callscreenapp.data.ListCategorySea
+import com.example.callscreenapp.data.ListCategoryTech
 import com.example.callscreenapp.model.ListTopic
 import com.example.callscreenapp.model.PhoneCallListImage
-import com.example.callscreenapp.ui.activity.SettingActivity
+import com.example.callscreenapp.redux.store.store
 import com.example.callscreenapp.ui.fragment.premission.PremissionSheetFragment
-import com.example.callscreenapp.ui.fragment.setting.SettingFragment
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
 class CallThemesFragment : Fragment() {
-
+    private var storeSubscription: (() -> Unit)? = null
+    private var listImage: List<PhoneCallListImage> = ListCategoryAll
     companion object {
         fun newInstance() = CallThemesFragment()
     }
@@ -35,8 +43,6 @@ class CallThemesFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
 
     }
 
@@ -56,48 +62,54 @@ class CallThemesFragment : Fragment() {
         val listImageView: RecyclerView = view.findViewById(R.id.call_themes_fragment_list_image)
         listTopic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-//        val snapHelper = PagerSnapHelper()
-//        snapHelper.attachToRecyclerView(listTopic)
 
-        // Tạo danh sách mẫu
         val nameTopic = listOf(
+            ListTopic("All", R.drawable.icon_topic),
             ListTopic("Anime", R.drawable.icon_topic),
+            ListTopic("Animal", R.drawable.icon_topic),
             ListTopic("Love", R.drawable.icon_topic),
-            ListTopic("Neon", R.drawable.icon_topic),
-            ListTopic("Anime", R.drawable.icon_topic),
-            ListTopic("Anime", R.drawable.icon_topic),
-            ListTopic("Anime", R.drawable.icon_topic),
-            ListTopic("Anime", R.drawable.icon_topic),
-            ListTopic("Anime", R.drawable.icon_topic),
-            ListTopic("Anime", R.drawable.icon_topic)
+            ListTopic("Nature", R.drawable.icon_topic),
+            ListTopic("Game", R.drawable.icon_topic),
+            ListTopic("Castle", R.drawable.icon_topic),
+            ListTopic("Fantasy", R.drawable.icon_topic),
+            ListTopic("Tech", R.drawable.icon_topic),
+            ListTopic("Sea", R.drawable.icon_topic)
         )
         listTopic.adapter = ListTopicAdapter(nameTopic)
 
-        // Kích hoạt PermissionSheetFragment khi nhấn vào một nút
         val btnShowPermissions: ImageView =
             view.findViewById(R.id.call_themes_fragment_icon_setting)
         btnShowPermissions.setOnClickListener {
-//            val intent = Intent(context, SettingActivity::class.java)
-//            startActivity(intent)
             showPermissionSheet()
         }
 
-        val listImage = listOf(
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA"),
-            PhoneCallListImage("https://i1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=0&h=0&q=100&dpr=2&fit=crop&s=yCCOAE_oJHG0iGnTDNgAEA")
-        )
+
 
         val layoutManager = FlexboxLayoutManager(context).apply {
             flexDirection = FlexDirection.ROW
             justifyContent = JustifyContent.SPACE_BETWEEN
         }
         listImageView.layoutManager = layoutManager
+
+        storeSubscription = store.subscribe {
+            val category = store.state.categoryName
+            requireActivity().runOnUiThread {
+                listImage = when (category) {
+                    "All" -> ListCategoryAll
+                    "Anime" -> ListCategoryAnime
+                    "Animal" -> ListCategoryAnimal
+                    "Love" -> ListCategoryLove
+                    "Nature" -> ListCategoryNature
+                    "Game" -> ListCategoryGame
+                    "Castle" -> ListCategoryCastle
+                    "Fantasy" -> ListCategoryFantasy
+                    "Tech" -> ListCategoryTech
+                    "Sea" -> ListCategorySea
+                    else -> ListCategoryAll // default to All if category not found
+                }
+                listImageView.adapter = PhoneCallListImageAdapter(listImage)
+            }
+        }
 
         listImageView.adapter = PhoneCallListImageAdapter(listImage)
     }
@@ -106,6 +118,4 @@ class CallThemesFragment : Fragment() {
         val permissionSheet = PremissionSheetFragment()
         permissionSheet.show(childFragmentManager, permissionSheet.tag)
     }
-
-
 }

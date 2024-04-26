@@ -2,14 +2,11 @@ package com.example.callscreenapp.ui.fragment.premission
 
 import android.Manifest
 import android.app.role.RoleManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.telecom.PhoneAccount
-import android.telecom.PhoneAccountHandle
 import android.telecom.TelecomManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
@@ -70,27 +66,20 @@ class PremissionSheetFragment : BottomSheetDialogFragment() {
 
         val switchPhoneCall: CardView = view.findViewById(R.id.permission_sheet_call_screen)
         switchPhoneCall.setOnClickListener {
-            Log.d("DialerChange", "CardView clicked")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                context?.let { ctx ->
-                    Log.d("DialerChange", "Android version is M or above")
-                    val telecomManager = ctx.getSystemService(Context.TELECOM_SERVICE) as? TelecomManager
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        Log.d("DialerChange", "Android version is Q or above")
-                        val roleManager = ctx.getSystemService(Context.ROLE_SERVICE) as? RoleManager
-                        roleManager?.let {
-                            val intent = it.createRequestRoleIntent(RoleManager.ROLE_DIALER)
-                            dialerRequestLauncher.launch(intent)
-                        } ?: Log.d("DialerChange", "RoleManager not available")
-                    } else {
-                        val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER).apply {
-                            putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, ctx.packageName)
-                        }
-                        ctx.startActivity(intent)
+            context?.let { ctx ->
+                val telecomManager = ctx.getSystemService(Context.TELECOM_SERVICE) as? TelecomManager
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val roleManager = ctx.getSystemService(Context.ROLE_SERVICE) as? RoleManager
+                    roleManager?.let {
+                        val intent = it.createRequestRoleIntent(RoleManager.ROLE_DIALER)
+                        dialerRequestLauncher.launch(intent)
                     }
-                } ?: Log.d("DialerChange", "Context is null")
-            } else {
-                Toast.makeText(context, "Android 6.0 and above required to change default phone app", Toast.LENGTH_LONG).show()
+                } else {
+                    val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER).apply {
+                        putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, ctx.packageName)
+                    }
+                    ctx.startActivity(intent)
+                }
             }
         }
     }

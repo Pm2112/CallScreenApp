@@ -20,11 +20,12 @@ import com.example.callscreenapp.redux.store.store
 class ListCallButtonAdapter(private val itemIcon: List<ListCallButton>) :
     RecyclerView.Adapter<ListCallButtonAdapter.ListCallButtonViewHolder>() {
 
-    private var selectedPosition = 0  // Lưu vị trí được chọn
+    private var selectedPosition = RecyclerView.NO_POSITION  // Lưu vị trí được chọn
 
     class ListCallButtonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val iconCallGreen: ImageView = view.findViewById(R.id.list_call_icon_green)
         val iconCallRed: ImageView = view.findViewById(R.id.list_call_icon_red)
+        val layout: View = view.findViewById(R.id.list_call_icon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListCallButtonViewHolder {
@@ -38,8 +39,15 @@ class ListCallButtonAdapter(private val itemIcon: List<ListCallButton>) :
         Glide.with(holder.itemView.context).load(itemBtn.urlIconGreen).into(holder.iconCallGreen)
         Glide.with(holder.itemView.context).load(itemBtn.urlIconRed).into(holder.iconCallRed)
 
+        holder.layout.isSelected =
+            if (position == selectedPosition) true else false
+
         holder.itemView.setOnClickListener {
             store.dispatch(AppAction.SetIconCallShowId(itemBtn.urlIconGreen, itemBtn.urlIconRed))
+            val previousItem = selectedPosition
+            selectedPosition = holder.adapterPosition
+            notifyItemChanged(previousItem)  // Refresh the previously selected item
+            notifyItemChanged(selectedPosition)  // Refresh the currently selected item
         }
     }
 

@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.example.callscreenapp.R
 import com.example.callscreenapp.adapter.ListCallButtonAdapter
 import com.example.callscreenapp.adapter.ListTopicAdapter
+import com.example.callscreenapp.data.ListButtonCall
 import com.example.callscreenapp.model.ListCallButton
 import com.example.callscreenapp.model.ListTopic
 import com.example.callscreenapp.redux.store.store
@@ -34,9 +35,7 @@ class ShowImageActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val urlItem = intent.getStringExtra("URL_ITEM")
-
+        val urlItem = store.state.backgroundUrl
         urlItem.let {
             // Sử dụng Glide để tải hình ảnh và đặt làm background
             val imageView = findViewById<ImageView>(R.id.show_image_view_activity)
@@ -66,19 +65,7 @@ class ShowImageActivity : AppCompatActivity() {
         snapHelper.attachToRecyclerView(listCallIcon)
 
         // Tạo danh sách mẫu
-        val nameTopic = listOf(
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_red, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red),
-            ListCallButton(R.drawable.icon_call_green, R.drawable.icon_call_red)
-        )
+        val nameTopic = ListButtonCall
         listCallIcon.adapter = ListCallButtonAdapter(nameTopic)
 
         val iconCallShowGreen: ImageView = findViewById(R.id.show_image_activity_icon_green)
@@ -94,7 +81,7 @@ class ShowImageActivity : AppCompatActivity() {
 
     }
 
-    fun loadImageIntoView(context: Context, imageView: ImageView, imageUrl: Int) {
+    private fun loadImageIntoView(context: Context, imageView: ImageView, imageUrl: String) {
         Glide.with(context)
             .load(imageUrl)
             .into(imageView)

@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.callscreenapp.R
 import com.example.callscreenapp.model.PhoneCallListImage
+import com.example.callscreenapp.redux.action.AppAction
+import com.example.callscreenapp.redux.store.store
 import com.example.callscreenapp.ui.activity.ShowImageActivity
 
 class PhoneCallListImageAdapter(private val images: List<PhoneCallListImage>) :
@@ -33,7 +35,7 @@ class PhoneCallListImageAdapter(private val images: List<PhoneCallListImage>) :
         holder.itemView.setOnClickListener {
             val intent = Intent(holder.itemView.context, ShowImageActivity::class.java)
             // Truyền dữ liệu nếu cần, ví dụ dưới đây truyền urlItem
-            intent.putExtra("URL_ITEM", imageItem.urlName)
+            store.dispatch(AppAction.SetBackgroundUrl(imageItem.urlName))
             holder.itemView.context.startActivity(intent)
         }
     }

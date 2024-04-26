@@ -18,48 +18,24 @@ import com.example.callscreenapp.model.ListTopic
 import com.example.callscreenapp.redux.action.AppAction
 import com.example.callscreenapp.redux.store.store
 
-class ListRingtoneAdapter (private val itemTopic: List<ListAvatar>) : RecyclerView.Adapter<ListAvatarAdapter.ListAvatarViewHolder>() {
+class ListRingtoneAdapter (private val nameItem: List<ListRingtone>) : RecyclerView.Adapter<ListRingtoneAdapter.ListRingtoneViewHolder>() {
 
-    private var selectedPosition = 0  // Lưu vị trí được chọn
 
-    class ListAvatarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageAvatar: TextView = view.findViewById(R.id.list_topic_card_text)
+    class ListRingtoneViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val nameRingtone: TextView = view.findViewById(R.id.list_ringtone_title)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListTopicViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListRingtoneViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.list_topic_image, parent, false)
-        return ListTopicViewHolder(view)
+            .inflate(R.layout.list_ringtone, parent, false)
+        return ListRingtoneViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ListTopicViewHolder, position: Int) {
-        val itemTopic = itemTopic[position]
-        holder.textViewName.text = itemTopic.nameTopic
-        Glide.with(holder.itemView.context).load(itemTopic.urlTopic).into(holder.iconViewImage)
+    override fun onBindViewHolder(holder: ListRingtoneViewHolder, position: Int) {
+        val itemTopic = nameItem[position]
+        holder.nameRingtone.text = itemTopic.nameRingtone
 
-        // Set background based on selection
-        val cardColor = if (position == selectedPosition) R.color.topic_active else R.color.white
-        holder.layout.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, cardColor))
-        val textColor = if (position == selectedPosition) R.color.white else R.color.topic_text
-        holder.textViewName.setTextColor(ContextCompat.getColorStateList(holder.itemView.context, textColor))
-        val iconTopic = if (position == selectedPosition) R.drawable.icon_topic_active else R.drawable.icon_topic
-        holder.iconViewImage.setImageDrawable(ContextCompat.getDrawable(holder.itemView.context, iconTopic))
-
-        // Handle item clicks
-        holder.itemView.setOnClickListener {
-            val previousItem = selectedPosition
-            selectedPosition = holder.adapterPosition
-            notifyItemChanged(previousItem)  // Refresh the previously selected item
-            notifyItemChanged(selectedPosition)  // Refresh the currently selected item
-
-            // Cuộn RecyclerView để mục được chọn hiển thị ở giữa
-            (holder.itemView.parent as? RecyclerView)?.layoutManager?.let {
-                if (it is LinearLayoutManager) {
-                    it.scrollToPositionWithOffset(position, 150)  // Giá trị 150 là offset để căn chỉnh mục đích
-                }
-            }
-        }
     }
 
-    override fun getItemCount(): Int = itemTopic.size
+    override fun getItemCount(): Int = nameItem.size
 }

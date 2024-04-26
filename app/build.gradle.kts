@@ -50,6 +50,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("org.reduxkotlin:redux-kotlin-threadsafe-jvm:0.5.5")
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    implementation ("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("androidx.room:room-runtime:2.4.0")
+    implementation("androidx.room:room-ktx:2.4.0")
+    implementation("androidx.activity:activity-ktx:1.7.0")
 }

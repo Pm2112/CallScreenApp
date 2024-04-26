@@ -24,13 +24,24 @@
             <ImageView
                 android:id="@+id/permission_sheet_title"
                 android:layout_width="wrap_content"
-                android:layout_height="41dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginTop="25dp"
                 android:importantForAccessibility="no"
                 android:src="@drawable/permission_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="wrap_content"
+                android:layout_height="41dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginEnd="35dp"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="@+id/permission_sheet_title"
+                app:layout_constraintStart_toEndOf="@+id/permission_sheet_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/permission_sheet_title" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/permission_sheet_phone_call"
@@ -58,6 +69,13 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:importantForAccessibility="no" />
 
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -89,6 +107,13 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:importantForAccessibility="no" />
 
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -120,6 +145,13 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:importantForAccessibility="no" />
 
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -151,6 +183,13 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:importantForAccessibility="no" />
 
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:checked="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.callscreenapp.R
 import com.example.callscreenapp.model.ListTopic
+import com.example.callscreenapp.redux.action.AppAction
+import com.example.callscreenapp.redux.store.store
 
 class ListTopicAdapter (private val itemTopic: List<ListTopic>) : RecyclerView.Adapter<ListTopicAdapter.ListTopicViewHolder>() {
 
@@ -55,6 +57,8 @@ class ListTopicAdapter (private val itemTopic: List<ListTopic>) : RecyclerView.A
                     it.scrollToPositionWithOffset(position, 150)  // Giá trị 150 là offset để căn chỉnh mục đích
                 }
             }
+
+            store.dispatch(AppAction.SetCategory(itemTopic.nameTopic))
         }
     }
 
