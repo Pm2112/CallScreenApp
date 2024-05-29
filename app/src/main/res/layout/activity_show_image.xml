@@ -11,6 +11,7 @@
         android:id="@+id/show_image_view_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:importantForAccessibility="no" />
 
     <ImageView
@@ -60,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="41dp"
         android:layout_marginTop="22dp"
-        android:text="TUNA NGUYEN"
+        android:text="@string/dialer_name"
         android:textSize="28sp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"

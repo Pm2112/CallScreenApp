@@ -13,6 +13,10 @@
     <color name="preview_text">#1954C8</color>
     <color name="menu_option_card">#1954c826</color>
     <color name="none">#00000066</color>
+    <color name="overlay">#80000000</color>
+    <color name="overlay_none">#00000000</color>
     <color name="border_background">#1954C8</color>
-
+    <color name="phone_number">#797979</color>
+    <color name="setting_text">#161525</color>
+    <color name="background_primary">#2176EA</color>
 </resources>

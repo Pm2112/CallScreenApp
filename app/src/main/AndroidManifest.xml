@@ -7,12 +7,19 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Permission for making phone calls -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- Permission for accessing contacts -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -24,6 +31,17 @@
         android:name="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="true" />
 
     <queries>
         <intent>
@@ -35,16 +53,43 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_laucher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_laucher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CallScreenApp"
+        android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.MyDialerActivity"
-            android:exported="false">
+            android:name=".ui.activity.SplashCustomActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
+        <receiver
+            android:name=".service.NetworkChangeReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".ui.activity.OnboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CustomizePreviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.MyDialerActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.NotificationActivity"
             android:exported="false" />
@@ -59,12 +104,13 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true"
+            android:theme="@style/Theme.Splash">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.DIAL" />
 
@@ -78,6 +124,7 @@
                 <data android:scheme="tel" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".service.MyInCallServiceImplementation"
             android:exported="true"

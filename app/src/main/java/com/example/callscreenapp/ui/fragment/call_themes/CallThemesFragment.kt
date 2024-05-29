@@ -2,15 +2,21 @@ package com.example.callscreenapp.ui.fragment.call_themes
 
 
 
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.callscreenapp.Impl.CategoryClickListener
 import com.example.callscreenapp.R
 import com.example.callscreenapp.adapter.ListTopicAdapter
 import com.example.callscreenapp.adapter.PhoneCallListImageAdapter
@@ -26,14 +32,18 @@ import com.example.callscreenapp.data.ListCategorySea
 import com.example.callscreenapp.data.ListCategoryTech
 import com.example.callscreenapp.model.ListTopic
 import com.example.callscreenapp.model.PhoneCallListImage
+import com.example.callscreenapp.permission.checkContactsPermission
+import com.example.callscreenapp.permission.checkPhoneCallPermission
+import com.example.callscreenapp.permission.hasWriteSettingsPermission
+import com.example.callscreenapp.permission.isDefaultDialer
 import com.example.callscreenapp.redux.store.store
+import com.example.callscreenapp.ui.activity.SettingActivity
 import com.example.callscreenapp.ui.fragment.premission.PremissionSheetFragment
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 
-class CallThemesFragment : Fragment() {
-    private var storeSubscription: (() -> Unit)? = null
+class CallThemesFragment : Fragment(), CategoryClickListener {
     private var listImage: List<PhoneCallListImage> = ListCategoryAll
     companion object {
         fun newInstance() = CallThemesFragment()
@@ -46,6 +56,22 @@ class CallThemesFragment : Fragment() {
 
     }
 
+    override fun onCategoryItemClicked(category: String) {
+        setListImage(requireView(), when (category) {
+            "All" -> ListCategoryAll
+            "Anime" -> ListCategoryAnime
+            "Animal" -> ListCategoryAnimal
+            "Love" -> ListCategoryLove
+            "Nature" -> ListCategoryNature
+            "Game" -> ListCategoryGame
+            "Castle" -> ListCategoryCastle
+            "Fantasy" -> ListCategoryFantasy
+            "Tech" -> ListCategoryTech
+            "Sea" -> ListCategorySea
+            else -> ListCategoryAll // default to All if category not found
+        })
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,11 +81,12 @@ class CallThemesFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_call_themes, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val listTopic: RecyclerView = view.findViewById(R.id.call_themes_fragment_list_topic)
-        val listImageView: RecyclerView = view.findViewById(R.id.call_themes_fragment_list_image)
+//        val listImageView: RecyclerView = view.findViewById(R.id.call_themes_fragment_list_image)
         listTopic.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
@@ -75,47 +102,29 @@ class CallThemesFragment : Fragment() {
             ListTopic("Tech", R.drawable.icon_topic),
             ListTopic("Sea", R.drawable.icon_topic)
         )
-        listTopic.adapter = ListTopicAdapter(nameTopic)
+        listTopic.adapter = ListTopicAdapter(nameTopic, this)
 
-        val btnShowPermissions: ImageView =
+        val btnSetting: ImageView =
             view.findViewById(R.id.call_themes_fragment_icon_setting)
-        btnShowPermissions.setOnClickListener {
-            showPermissionSheet()
+        btnSetting.setOnClickListener {
+//            showPermissionSheet()
+            val intent = Intent(context, SettingActivity::class.java)
+            startActivity(intent)
         }
 
+        setListImage(view, listImage)
 
+    }
 
+    private fun setListImage(view: View, listImage: List<PhoneCallListImage>) {
+        val listImageView: RecyclerView = view.findViewById(R.id.call_themes_fragment_list_image)
         val layoutManager = FlexboxLayoutManager(context).apply {
             flexDirection = FlexDirection.ROW
             justifyContent = JustifyContent.SPACE_BETWEEN
         }
         listImageView.layoutManager = layoutManager
 
-        storeSubscription = store.subscribe {
-            val category = store.state.categoryName
-            requireActivity().runOnUiThread {
-                listImage = when (category) {
-                    "All" -> ListCategoryAll
-                    "Anime" -> ListCategoryAnime
-                    "Animal" -> ListCategoryAnimal
-                    "Love" -> ListCategoryLove
-                    "Nature" -> ListCategoryNature
-                    "Game" -> ListCategoryGame
-                    "Castle" -> ListCategoryCastle
-                    "Fantasy" -> ListCategoryFantasy
-                    "Tech" -> ListCategoryTech
-                    "Sea" -> ListCategorySea
-                    else -> ListCategoryAll // default to All if category not found
-                }
-                listImageView.adapter = PhoneCallListImageAdapter(listImage)
-            }
-        }
-
-        listImageView.adapter = PhoneCallListImageAdapter(listImage)
+        listImageView.adapter = PhoneCallListImageAdapter(listImage, childFragmentManager)
     }
 
-    private fun showPermissionSheet() {
-        val permissionSheet = PremissionSheetFragment()
-        permissionSheet.show(childFragmentManager, permissionSheet.tag)
-    }
 }

@@ -1,5 +1,7 @@
 package com.example.callscreenapp.adapter
 
+import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import com.example.callscreenapp.R
 import com.example.callscreenapp.model.ListAvatar
 import com.example.callscreenapp.model.ListRingtone
 import com.example.callscreenapp.model.ListTopic
+import com.example.callscreenapp.process.displayImageFromInternalStorage
 import com.example.callscreenapp.redux.action.AppAction
 import com.example.callscreenapp.redux.store.store
 
@@ -41,14 +44,29 @@ class ListAvatarAdapter(
     override fun onBindViewHolder(holder: ListAvatarViewHolder, position: Int) {
         val item = itemAvatar[position]
         if (position != 0) {
-            Glide.with(holder.itemView.context).load(item.urlAvatar).into(holder.iconAvatar)
+            if (isHttpsUrl(item.urlAvatar)) {
+                Log.d("ListAvatarAdapter", "Image Uri: ${item.urlAvatar}")
+                Glide.with(holder.itemView.context).load(item.urlAvatar).into(holder.iconAvatar)
+            } else {
+                Glide.with(holder.itemView.context).load(item.urlAvatar).into(holder.iconAvatar)
+            }
         } else {
-            Glide.with(holder.itemView.context).load(R.drawable.icon_plus).into(holder.iconAvatar)
+            val desiredWidth = 140 // Specify your desired width in pixels
+            val desiredHeight = 140 // Specify your desired height in pixels
+
+
+            Glide.with(holder.itemView.context)
+                .load(R.drawable.icon_plus_small)
+                .override(desiredWidth, desiredHeight) // Resize the image
+                .into(holder.iconAvatar)
         }
 
         // Update the selection icon and border based on the current selected position
         holder.selectionIcon.setImageDrawable(
-            if (position == selectedPosition && position != 0) ContextCompat.getDrawable(holder.itemView.context, R.drawable.icon_btn_avatar_active)
+            if (position == selectedPosition && position != 0) ContextCompat.getDrawable(
+                holder.itemView.context,
+                R.drawable.icon_btn_avatar_active
+            )
             else null
         )
         holder.border.isSelected = (position == selectedPosition && position != 0)
@@ -72,6 +90,10 @@ class ListAvatarAdapter(
                 store.dispatch(AppAction.SetAvatarUrl(item.urlAvatar))
             }
         }
+    }
+
+    private fun isHttpsUrl(url: String): Boolean {
+        return url.startsWith("https", ignoreCase = true)
     }
 
     override fun getItemCount(): Int = itemAvatar.size

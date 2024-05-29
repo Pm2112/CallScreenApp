@@ -1,14 +1,38 @@
 package com.example.callscreenapp.permission
 
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.Manifest
+import android.app.role.RoleManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import android.provider.Settings
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
+import com.example.callscreenapp.ui.fragment.call_themes.CallThemesFragment
+import com.example.callscreenapp.ui.fragment.premission.PremissionSheetFragment
 
-class Permission {
-    companion object {
-        const val PERMISSION_PHONE_CALL_CODE = 1
-        const val PERMISSION_STORAGE_CODE = 2
-        const val PERMISSION_CONTACTS_CODE = 3
-        const val REQUEST_CODE_SET_DEFAULT_DIALER = 4
-    }
 
+fun checkPhoneCallPermission(context: Context): Boolean {
+    val permission = Manifest.permission.CALL_PHONE
+    val permissionResult = ContextCompat.checkSelfPermission(context, permission)
+    return permissionResult == PackageManager.PERMISSION_GRANTED
+}
+
+fun checkContactsPermission(context: Context): Boolean {
+    val permission = Manifest.permission.READ_CONTACTS
+    val permissionResult = ContextCompat.checkSelfPermission(context, permission)
+    return permissionResult == PackageManager.PERMISSION_GRANTED
+}
+
+@RequiresApi(Build.VERSION_CODES.Q)
+fun isDefaultDialer(context: Context): Boolean {
+    val roleManager = getSystemService(context, RoleManager::class.java)
+    return roleManager?.isRoleHeld(RoleManager.ROLE_DIALER) == true
+}
+
+fun hasWriteSettingsPermission(context: Context): Boolean {
+    return Settings.System.canWrite(context)
 }

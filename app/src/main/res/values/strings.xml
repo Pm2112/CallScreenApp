@@ -5,5 +5,62 @@
     <string name="customize_fragment_preview">Preview</string>
     <string name="my_themes_fragment_title_text">My Themes</string>
     <string name="ringtone_activity_title_text">Ringtones</string>
+    <string name="fragment_select_contact_title">Select set for</string>
+    <string name="fragment_select_contact_all_contact">All Contacts</string>
+    <string name="fragment_select_contact_specific_contact">A Specific Contact</string>
+    <string name="onboard_btn_text">Next</string>
+    <string name="onboard_btn_get_started">Get Started</string>
+    <string name="fragment_onboard_1_text">Customize your call with a perfect theme</string>
+    <string name="fragment_onboard_2_text">Easy to customize your phone call</string>
+    <string name="fragment_onboard_3_text">Flash effect when incoming call</string>
+    <string name="search_hint">Search name or phone number</string>
+    <string name="contact_title">Contact</string>
+    <string name="setting_title">Settings</string>
+    <string name="setting_customer_support">Customer Support</string>
+    <string name="setting_rate_app">Rate App</string>
+    <string name="setting_privacy_policy">Privacy Policy</string>
+    <string name="setting_terms_of_use">Terms Of Use</string>
+    <string name="setting_more_apps">More Apps</string>
+    <string name="dialer_name">Call Screen Theme</string>
+
+    <!-- ads & subscription -->
+    <string name="sub_text_des" translatable="false">
+• The price of weekly subscription is $5.99 and yearly subscription is $49.99\n\n
+• One you confirm the purchase, your payment will be charged to your iTunes Account.\n\n
+• Your subscription automatically renews unless auto-renew is turned off at least 24-hours before the end of the current period.\n\n
+• Your account will be charged for renewal within 24-hours prior to the end of the current period.\n\n
+• Subscription maybe managed by the user and auto-renewal maybe turned off by going to the user’s account setting after purchasing.</string>
+    <string name="text_restore" translatable="false"><b>Restore</b></string>
+    <string name="license_key" translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu+cXY1hb9RAO1TMjfrEOOr9ZJ74l+xoIpZOCiKnKKP/x6eBaUA5h7gXHLXUkLlsXSHGk7+GJP+g+t2gvhweNdbj2lh0E0eLKY2y65YiU3GmJygROSRFEPzHSyqio4JWEWoHBXZ6JxMGSSq1CMH5MkR94sshtHLwNtM/t5DLQEwY4HmBVLBOpZhTbgwJiw6zn8YQdSbmNlEyNyzQTHlpsvEHV03maxt3azf09szyQDMdZWKtM8tF+8Dv4ktQf7Ry+b4Lyy4RuzKp6xpfUyaCDRS/9uPVsH5xOcL2XZVKMNEe4Ea2utKSgG4Bng8y31fz9Fl3Ec8MveDFzoFbY0arIuwIDAQAB</string>
+
+
+    <!-- -
+    This is an ad unit ID for an interstitial test ad. Replace with your own interstitial ad unit id.
+    For more information, see https://support.google.com/admob/answer/3052638
+<!- -->
+    <!--    AD Test-->
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/9214589741</string>
+    <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="reward_interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/5354046379</string>
+    <string-array name="reward_ad_unit_id">
+        <item>ca-app-pub-3940256099942544/5224354917</item>
+        <item>ca-app-pub-3940256099942544/5224354917</item>
+        <item>ca-app-pub-3940256099942544/5224354917</item>
+        <item>ca-app-pub-3940256099942544/5224354917</item>
+        <item>ca-app-pub-3940256099942544/5224354917</item>
+    </string-array>
+
+    <string name="native_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/2247696110</string>
+    <string-array name="open_ad_unit_id">
+        <item>ca-app-pub-3940256099942544/9257395921</item>
+        <item>ca-app-pub-3940256099942544/9257395921</item>
+        <item>ca-app-pub-3940256099942544/9257395921</item>
+    </string-array>
+    <string name="app_ad_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+
+    <string name="dialog_default_title" translatable="false">Here\'s a message!</string>
+    <string name="dialog_ok" translatable="false">OK</string>
+    <string name="dialog_cancel" translatable="false">Cancel</string>
+    <string name="LOADING" translatable="false">Loading...</string>
 
 </resources>

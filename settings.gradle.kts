@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "CallScreenApp"
 include(":app")
+include(":whaleutils")
+
  

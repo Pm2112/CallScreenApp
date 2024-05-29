@@ -13,6 +13,10 @@ import android.view.ViewGroup
 import android.widget.Switch
 import androidx.cardview.widget.CardView
 import com.example.callscreenapp.R
+import com.example.callscreenapp.process.getFlashSetting
+import com.example.callscreenapp.process.getVibrateSetting
+import com.example.callscreenapp.process.saveFlashSetting
+import com.example.callscreenapp.process.saveVibrateSetting
 import com.example.callscreenapp.ui.activity.RingtoneActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 
@@ -47,20 +51,26 @@ class MenuOptionFragment : Fragment() {
         }
 
         val btnVibrate: SwitchMaterial = view.findViewById(R.id.fragment_menu_option_vibrate)
-        btnVibrate.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                Log.e("btnVibrate", "btnVibrate true")
+        val (isVibrate, isVibrate1) = getVibrateSetting(requireContext())
+        btnVibrate.isChecked = isVibrate == true
+        btnVibrate.setOnClickListener {
+            if (btnVibrate.isChecked) {
+                saveVibrateSetting(requireContext(), true)
+//                Log.d("btnVibrate", "btnVibrate true")
             } else {
-                Log.e("btnVibrate", "btnVibrate false")
+                saveVibrateSetting(requireContext(), false)
+//                Log.d("btnVibrate", "btnVibrate false")
             }
         }
 
         val btnFlash: SwitchMaterial = view.findViewById(R.id.fragment_menu_option_flash)
+        val (isFlash, isFlash1) = getFlashSetting(requireContext())
+        btnFlash.isChecked = isFlash == true
         btnFlash.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                Log.e("btnVibrate", "btnVibrate true")
+                saveFlashSetting(requireContext(), true)
             } else {
-                Log.e("btnVibrate", "btnVibrate false")
+                saveFlashSetting(requireContext(), false)
             }
         }
     }

@@ -69,6 +69,7 @@
                 android:layout_marginTop="14dp"
                 android:text="Avatar Call"
                 android:textSize="16dp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,6 +91,7 @@
                 android:layout_marginTop="14dp"
                 android:text="Icon Call"
                 android:textSize="16dp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/customize_fragment_list_avatar" />
 
@@ -111,6 +113,7 @@
                 android:layout_marginTop="14dp"
                 android:text="Icon Call"
                 android:textSize="16dp"
+                android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/customize_fragment_list_icon_call" />
 

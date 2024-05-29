@@ -7,11 +7,36 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.example.callscreenapp.R
-import com.example.callscreenapp.database.AppDatabase
-import com.example.callscreenapp.database.DataImage
+import com.example.callscreenapp.adapter.MyThemeAdapter
+import com.example.callscreenapp.adapter.PhoneCallListImageAdapter
+import com.example.callscreenapp.data.AvatarSize
+import com.example.callscreenapp.data.HttpUrlAvatar
+import com.example.callscreenapp.data.ListCategoryAll
+import com.example.callscreenapp.data.ListCategoryAnimal
+import com.example.callscreenapp.data.ListCategoryAnime
+import com.example.callscreenapp.data.ListCategoryCastle
+import com.example.callscreenapp.data.ListCategoryFantasy
+import com.example.callscreenapp.data.ListCategoryGame
+import com.example.callscreenapp.data.ListCategoryLove
+import com.example.callscreenapp.data.ListCategoryNature
+import com.example.callscreenapp.data.ListCategorySea
+import com.example.callscreenapp.data.ListCategoryTech
+import com.example.callscreenapp.data.realm
+import com.example.callscreenapp.database.Avatar
+import com.example.callscreenapp.database.BackgroundTheme
+import com.example.callscreenapp.model.MyTheme
+import com.example.callscreenapp.redux.action.AppAction
+import com.example.callscreenapp.redux.store.store
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
+import io.realm.kotlin.ext.query
+import io.realm.kotlin.query.RealmResults
 
 class MyThemesFragment : Fragment() {
+    private var storeSubscription: (() -> Unit)? = null
 
     companion object {
         fun newInstance() = MyThemesFragment()
@@ -35,15 +60,54 @@ class MyThemesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val listMyTheme: RecyclerView = view.findViewById(R.id.my_themes_fragment_list_image)
+        val items: RealmResults<BackgroundTheme> = realm.query<BackgroundTheme>().find()
 
-//        val db = AppDatabase.getDatabase(requireContext())
-//        val dataImageDao = db.dataImage()
-//
-//        // Thêm user
-//        dataImageDao.insertAll(DataImage(urlBackGround = "John Doe", urlIconCall = 30))
-//
-//        // Lấy tất cả users
-//        val listImage = dataImageDao.getAll()
-//        Log.e("TAGlistImage", listImage.toString())
+        val layoutManager = FlexboxLayoutManager(context).apply {
+            flexDirection = FlexDirection.ROW
+            justifyContent = JustifyContent.SPACE_BETWEEN
+        }
+        listMyTheme.layoutManager = layoutManager
+
+        val listMyThemeData = mutableListOf<MyTheme>().apply {
+            for (item in items) {
+                add(MyTheme(item.backgroundTheme, item.avatarUrl, item.iconAnswer, item.iconReject))
+            }
+        }
+
+        Log.d("listMyThemeData", listMyThemeData.toString())
+
+        listMyTheme.adapter = MyThemeAdapter(listMyThemeData, requireContext())
+
+        storeSubscription = store.subscribe {
+            val refresh = store.state.refresh
+            requireActivity().runOnUiThread {
+                when (refresh) {
+                    true -> {
+                        refreshAdapter(listMyTheme)
+                    }
+                    false -> {
+
+                    }
+                }
+            }
+        }
+    }
+
+    private fun refreshAdapter(listMyTheme: RecyclerView) {
+        val itemsNew: RealmResults<BackgroundTheme> = realm.query<BackgroundTheme>().find()
+        val listMyThemeDataNew = mutableListOf<MyTheme>().apply {
+            for (item in itemsNew) {
+                add(
+                    MyTheme(
+                        item.backgroundTheme,
+                        item.avatarUrl,
+                        item.iconAnswer,
+                        item.iconReject
+                    )
+                )
+            }
+        }
+        listMyTheme.adapter = MyThemeAdapter(listMyThemeDataNew, requireContext())
     }
 }

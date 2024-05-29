@@ -23,7 +23,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_call_themes"
-            android:layout_width="75dp"
+            android:layout_width="105dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_customize"
@@ -36,27 +36,19 @@
                 android:id="@+id/icon_call_themes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_call_themes"
-                app:layout_constraintBottom_toTopOf="@+id/title_btn_call_themes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/title_btn_call_themes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/title_btn_call_themes"
+                android:src="@drawable/layout_icon_call_screen_theme"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_call_themes" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAccessibility="no" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_customize"
-            android:layout_width="75dp"
+            android:layout_width="105dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,27 +59,19 @@
                 android:id="@+id/icon_customize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_customize"
-                app:layout_constraintBottom_toTopOf="@+id/title_btn_customize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/title_btn_customize"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/title_btn_customize"
+                android:src="@drawable/layout_icon_customize_screen_theme"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_customize" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAccessibility="no" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/btn_my_themes"
-            android:layout_width="75dp"
+            android:layout_width="105dp"
             android:layout_height="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -100,21 +84,12 @@
                 android:id="@+id/icon_my_themes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon_my_themes"
-                app:layout_constraintBottom_toTopOf="@+id/title_btn_my_themes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/title_btn_my_themes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/title_btn_my_themes"
+                android:src="@drawable/layout_icon_my_screen_theme"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/icon_my_themes" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:importantForAccessibility="no" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

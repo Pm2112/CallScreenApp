@@ -1,49 +1,86 @@
 package com.example.callscreenapp.ui.fragment.premission
 
-import android.Manifest
+import android.app.Activity
 import android.app.role.RoleManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.telecom.TelecomManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import com.example.callscreenapp.Impl.WriteSettingsPermissionListener
 import com.example.callscreenapp.R
+import com.example.callscreenapp.adapter.PhoneCallListImageAdapter
+import com.example.callscreenapp.data.ListCategoryAll
+import com.example.callscreenapp.data.ListCategoryAnimal
+import com.example.callscreenapp.data.ListCategoryAnime
+import com.example.callscreenapp.data.ListCategoryCastle
+import com.example.callscreenapp.data.ListCategoryFantasy
+import com.example.callscreenapp.data.ListCategoryGame
+import com.example.callscreenapp.data.ListCategoryLove
+import com.example.callscreenapp.data.ListCategoryNature
+import com.example.callscreenapp.data.ListCategorySea
+import com.example.callscreenapp.data.ListCategoryTech
+import com.example.callscreenapp.permission.hasWriteSettingsPermission
+import com.example.callscreenapp.permission.isDefaultDialer
+import com.example.callscreenapp.redux.action.AppAction
+import com.example.callscreenapp.redux.store.store
+import com.example.callscreenapp.ui.activity.ShowImageActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.switchmaterial.SwitchMaterial
 
+@Suppress("DEPRECATION")
 class PremissionSheetFragment : BottomSheetDialogFragment() {
 
-    private val REQUEST_ID = 1
     companion object {
         fun newInstance() = PremissionSheetFragment()
-        const val PERMISSION_PHONE_CALL_CODE = 1
-        const val PERMISSION_STORAGE_CODE = 2
-        const val PERMISSION_CONTACTS_CODE = 3
-        const val REQUEST_CODE_SET_DEFAULT_DIALER = 4
-    }
 
+        const val WRITE_SETTINGS_PERMISSION_REQUEST_CODE = 1002
+    }
+    private var storeSubscription: (() -> Unit)? = null
+    private var writeSettingsPermissionListener: WriteSettingsPermissionListener? = null
     private val viewModel: PremissionSheetViewModel by viewModels()
 
-    private val dialerRequestLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            // Handle the acceptance
-        } else {
-            // Handle the denial
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private val dialerRequestLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                Log.d("requestDefaultDialerCheck", "1")
+                setDialerPermission(requireView())
+                checkAllPermission(requireView())
+            } else {
+                Log.d("requestDefaultDialerCheck", "2")
+                setDialerPermission(requireView())
+                checkAllPermission(requireView())
+            }
         }
-    }
+
+    private val writeSettingsPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (Settings.System.canWrite(requireContext())) {
+                setWriteSettingsPermission(requireView())
+                checkAllPermission(requireView())
+            } else {
+                setWriteSettingsPermission(requireView())
+                checkAllPermission(requireView())
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        setStyle(STYLE_NORMAL, R.style.CustomBottomSheetDialog)
     }
 
     override fun onCreateView(
@@ -53,86 +90,117 @@ class PremissionSheetFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_premission_sheet, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<CardView>(R.id.permission_sheet_phone_call).setOnClickListener {
-            checkAndRequestPermission(Manifest.permission.CALL_PHONE, PERMISSION_PHONE_CALL_CODE)
+        val isDefaultDialer = isDefaultDialer(requireContext())
+        var isWriteSettingsPermission = hasWriteSettingsPermission(requireContext())
+
+        val permissionDefaultDialer: SwitchMaterial =
+            view.findViewById(R.id.permission_phone_default)
+        val permissionWriteSettingsPermission: SwitchMaterial =
+            view.findViewById(R.id.permission_system_setting)
+        val permissionAll: SwitchMaterial = view.findViewById(R.id.permission_all)
+
+        permissionAll.isChecked = isDefaultDialer && isWriteSettingsPermission
+
+        permissionDefaultDialer.isChecked = isDefaultDialer
+        permissionWriteSettingsPermission.isChecked = isWriteSettingsPermission
+
+        permissionDefaultDialer.setOnClickListener {
+            if (!isDefaultDialer) {
+                requestDefaultDialer(requireContext())
+            }
         }
 
-        view.findViewById<CardView>(R.id.permission_sheet_phone_storage).setOnClickListener {
-            checkAndRequestPermission(Manifest.permission.READ_CONTACTS, PERMISSION_CONTACTS_CODE)
+        permissionWriteSettingsPermission.setOnClickListener {
+            if (!isWriteSettingsPermission) {
+                requestWriteSettingsPermission(requireActivity())
+                isWriteSettingsPermission = hasWriteSettingsPermission(requireContext())
+                permissionWriteSettingsPermission.isChecked = isWriteSettingsPermission
+            }
         }
 
-        val switchPhoneCall: CardView = view.findViewById(R.id.permission_sheet_call_screen)
-        switchPhoneCall.setOnClickListener {
-            context?.let { ctx ->
-                val telecomManager = ctx.getSystemService(Context.TELECOM_SERVICE) as? TelecomManager
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    val roleManager = ctx.getSystemService(Context.ROLE_SERVICE) as? RoleManager
-                    roleManager?.let {
-                        val intent = it.createRequestRoleIntent(RoleManager.ROLE_DIALER)
-                        dialerRequestLauncher.launch(intent)
-                    }
-                } else {
-                    val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER).apply {
-                        putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, ctx.packageName)
-                    }
-                    ctx.startActivity(intent)
+        permissionAll.setOnClickListener {
+            setAllPermission(view)
+        }
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun setDialerPermission(view: View) {
+        val permissionDefaultDialer: SwitchMaterial = view.findViewById(R.id.permission_phone_default)
+        val isDefaultDialer = isDefaultDialer(requireContext())
+        permissionDefaultDialer.isChecked = isDefaultDialer
+    }
+
+    private fun setWriteSettingsPermission(view: View) {
+        val permissionWriteSettingsPermission: SwitchMaterial =
+            view.findViewById(R.id.permission_system_setting)
+        val isWriteSettingsPermission = hasWriteSettingsPermission(requireContext())
+        permissionWriteSettingsPermission.isChecked = isWriteSettingsPermission
+    }
+
+    private fun checkAllPermission(view: View) {
+        val permissionDefaultDialer: SwitchMaterial = view.findViewById(R.id.permission_phone_default)
+        val permissionWriteSettingsPermission: SwitchMaterial =
+            view.findViewById(R.id.permission_system_setting)
+        val permissionAll: SwitchMaterial = view.findViewById(R.id.permission_all)
+        permissionAll.isChecked = permissionDefaultDialer.isChecked && permissionWriteSettingsPermission.isChecked
+
+        if (permissionAll.isChecked) {
+            val intent = Intent(context, ShowImageActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun setAllPermission(view: View) {
+        val permissionAll: SwitchMaterial = view.findViewById(R.id.permission_all)
+        requestDefaultDialer(requireContext())
+        requestWriteSettingsPermission(requireActivity())
+        val permissionDefaultDialer: SwitchMaterial =
+            view.findViewById(R.id.permission_phone_default)
+        val permissionWriteSettingsPermission: SwitchMaterial =
+            view.findViewById(R.id.permission_system_setting)
+        permissionAll.isChecked = permissionDefaultDialer.isChecked && permissionWriteSettingsPermission.isChecked
+    }
+
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun requestDefaultDialer(context: Context) {
+        context.let { ctx ->
+            val telecomManager =
+                ctx.getSystemService(Context.TELECOM_SERVICE) as? TelecomManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val roleManager = ctx.getSystemService(Context.ROLE_SERVICE) as? RoleManager
+                roleManager?.let {
+                    val intent = it.createRequestRoleIntent(RoleManager.ROLE_DIALER)
+                    dialerRequestLauncher.launch(intent)
                 }
-            }
-        }
-    }
-
-    private fun checkAndRequestPermission(permission: String, requestCode: Int) {
-        context?.let { context ->
-            if (ContextCompat.checkSelfPermission(
-                    context,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions(arrayOf(permission), requestCode)
             } else {
-                onPermissionGranted(requestCode)
+                Log.d("requestDefaultDialerCheck", "2")
+                val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER).apply {
+                    putExtra(
+                        TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME,
+                        ctx.packageName
+                    )
+                }
+                ctx.startActivity(intent)
             }
         }
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            onPermissionGranted(requestCode)
-        } else {
-            Toast.makeText(
-                context,
-                "Permission denied for ${permissions.contentToString()}",
-                Toast.LENGTH_SHORT
-            ).show()
+
+    private fun requestWriteSettingsPermission(activity: Activity) {
+        if (!Settings.System.canWrite(activity.applicationContext)) {
+            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+            intent.data = Uri.parse("package:" + activity.packageName)
+            writeSettingsPermissionLauncher.launch(intent)
         }
     }
 
-    private fun onPermissionGranted(requestCode: Int) {
-        when (requestCode) {
-            PERMISSION_PHONE_CALL_CODE -> makePhoneCall()
-            PERMISSION_STORAGE_CODE -> handleStorageAccess()
-            PERMISSION_CONTACTS_CODE -> handleContactsAccess()
-        }
-    }
-
-    private fun makePhoneCall() {
-        // Code to initiate a phone call
-    }
-
-    private fun handleStorageAccess() {
-        // Code to handle storage access
-    }
-
-    private fun handleContactsAccess() {
-        // Code to handle contacts access
+    fun FragmentActivity.showCustomBottomSheet() {
+        PremissionSheetFragment().show(this.supportFragmentManager, PremissionSheetFragment::class.java.simpleName)
     }
 }
